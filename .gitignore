@@ -1,3 +1,6 @@
 .jekyll-cache/
 _site/
+Gemfile
+Gemfile.lock
+_posts/.MWebMetaData/
 
