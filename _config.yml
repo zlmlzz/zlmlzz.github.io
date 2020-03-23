@@ -1,7 +1,3 @@
-# gitee include test
-include: [_includes]
-include: [_layouts]
-include: [_sass]
 # Site settings
 title: Life of L
 email: 2327677698qq.com
@@ -46,4 +42,8 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-feed
-
+# 阅读处理
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+# Markdown 处理器
+#kramdown:
+    
