@@ -1,3 +1,7 @@
+#gitee
+include: [_includes]
+include: [_layouts]
+include: [_sass]
 # Site settings
 title: Life of L
 email: 2327677698qq.com
