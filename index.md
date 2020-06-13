@@ -12,8 +12,9 @@ layout: post
 * 李壮壮/男
 * 本科/徐州医科大学物联网工程
 * 工作年限：2年
-* 博客：https://zlmlzz.gitee.io/
-&emsp; &emsp;&ensp; https://zlmlzz.github.io/
+* 博客:
+    * [码云](https://zlmlzz.gitee.io/)
+    * [GitHub](https://zlmlzz.github.io/)
 
 ## 技术栈
 以下均为我熟练使用的技能
