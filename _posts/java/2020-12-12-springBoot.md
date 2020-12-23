@@ -34,3 +34,39 @@ public CorsFilter corsFilter(){
     return new CorsFilter(corsConfigurationSource);
 } 
 ```
+## spring boot 打包(war)
+```
+<packing>war</packing>
+```
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+    <!-- 2.移除自带的内置tomcat -->
+    <!--<exclusions>
+        <exclusion>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <groupId>org.springframework.boot</groupId>
+        </exclusion>
+    </exclusions>-->
+</dependency>
+```
+```
+<!-- 3.添加依赖 -->
+<!--<dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>javax.servlet-api</artifactId>
+    <scope>provided</scope>
+</dependency>-->
+```
+```
+// 4.增加war的启动类
+public class WarStartApplication extends SpringBootServletInitializer {
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        // 指向Application这个springboot启动类
+        return builder.sources(Application.class);
+    }
+}
+```

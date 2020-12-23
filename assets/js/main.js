@@ -35,9 +35,9 @@ $(function() {
       });
 
       if ($(this).prop("tagName") == 'H2') {
-        toc.append('<li class="post-toc-li post-toc-h2"><a href="#' + $(this).attr('id') + '" class="js-anchor-link">' + $(this).text() + '</a></li>');
+        toc.append('<li class="post-toc-li post-toc-h2"><a title="'+$(this).text()+' "href="#' + $(this).attr('id') + '" class="js-anchor-link">' + $(this).text() + '</a></li>');
       } else {
-        toc.append('<li class="post-toc-li post-toc-h3"><a href="#' + $(this).attr('id') + '" class="js-anchor-link">' + $(this).text() + '</a></li>');
+        toc.append('<li class="post-toc-li post-toc-h3"><a title="'+$(this).text()+'" href="#' + $(this).attr('id') + '" class="js-anchor-link">' + $(this).text() + '</a></li>');
       }
     });
 
