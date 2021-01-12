@@ -131,3 +131,111 @@ track_script {
 }
 ```
 * 重启keepalived使配置生效`systemctl restart keepalived`
+
+## 双主热备
+* 节点1
+
+```
+global_defs {
+    # 路由id:当前安装keepalived节点主机的标识符,全局唯一
+    router_id keep_1
+}
+
+# 计算机节点
+vrrp_instance VI_1 {
+    # 表示状态,当前的主节点,MASTER/BACKUP
+    state MASTER
+    # 当前实例绑定的网卡
+    inteface eth0
+    # 虚拟路由id，保证主备节点一致
+    virtual_router_id 51
+    # 优先级/权重，优先成为MASTER
+    priority 100
+    # 主备之间同步检查的时间间隔，默认为1s
+    advert_int 1
+    # 认证授权的密码,防止非法节点进入
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    # 虚拟IP
+    virtual_ipaddress {
+        192.168.1.161
+    }
+}
+
+vrrp_instance VI_2 {
+    # 表示状态,当前的主节点,MASTER/BACKUP
+    state BACKUP
+    # 当前实例绑定的网卡
+    inteface eth0
+    # 虚拟路由id，保证主备节点一致
+    virtual_router_id 52
+    # 优先级/权重，优先成为MASTER
+    priority 80
+    # 主备之间同步检查的时间间隔，默认为1s
+    advert_int 1
+    # 认证授权的密码,防止非法节点进入
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    # 虚拟IP
+    virtual_ipaddress {
+        192.168.1.162
+    }
+}
+```
+* 节点2
+
+```
+global_defs {
+    # 路由id:当前安装keepalived节点主机的标识符,全局唯一
+    router_id keep_2
+}
+
+# 计算机节点
+vrrp_instance VI_1 {
+    # 表示状态,当前的主节点,MASTER/BACKUP
+    state BACKUP
+    # 当前实例绑定的网卡
+    inteface eth0
+    # 虚拟路由id，保证主备节点一致
+    virtual_router_id 51
+    # 优先级/权重，优先成为MASTER
+    priority 80
+    # 主备之间同步检查的时间间隔，默认为1s
+    advert_int 1
+    # 认证授权的密码,防止非法节点进入
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    # 虚拟IP
+    virtual_ipaddress {
+        192.168.1.161
+    }
+}
+
+vrrp_instance VI_2 {
+    # 表示状态,当前的主节点,MASTER/BACKUP
+    state MASTER
+    # 当前实例绑定的网卡
+    inteface eth0
+    # 虚拟路由id，保证主备节点一致
+    virtual_router_id 52
+    # 优先级/权重，优先成为MASTER
+    priority 100
+    # 主备之间同步检查的时间间隔，默认为1s
+    advert_int 1
+    # 认证授权的密码,防止非法节点进入
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    # 虚拟IP
+    virtual_ipaddress {
+        192.168.1.162
+    }
+}
+```
