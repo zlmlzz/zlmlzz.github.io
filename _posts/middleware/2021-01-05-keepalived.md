@@ -239,3 +239,70 @@ vrrp_instance VI_2 {
     }
 }
 ```
+
+## keepalived+lvs+nginx
+```
+global_defs {
+    router_id keep_lvs_1
+}
+
+vrrp_instance VI_1 {
+    state MASTER
+    inteface eth0
+    virtual_router_id 40
+    priority 100
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+        192.168.1.150
+    }
+}
+
+# 配置集群地址访问的ip+端口,端口和nginx保持一致
+virtual_server 192.168.1.150 80 {
+    # 健康检查时间,单位:秒
+    delay_loop 6
+    # 配置负载均衡的算法,默认是轮询
+    lb_algo rr
+    # 设置lvs模式 NAT|TUN|DR
+    lb_kind DR
+    # 设置会话时间持久化时间
+    persitence_timeout 50
+    # 协议 -t
+    protocol TCP
+
+    # 负载均衡真实服务器,即nginx节点真实ip地址
+    real_server 192.168.1.171 80 {
+        # 轮询默认权重
+        weight 1
+        # 设置健康检查
+        TCP_CHECK {
+            # 检查80端口
+            connect_port 80
+            # 超时时间(秒)
+            connect_timeout 2
+            # 重试次数(次)
+            nb_get_retry 2
+            # 间隔时间(秒)
+            delay_before_retry 3
+        }
+    }
+    real_server 192.168.1.172 80 {
+        weight 1
+        # 设置健康检查
+        TCP_CHECK {
+            # 检查80端口
+            connect_port 80
+            # 超时时间(秒)
+            connect_timeout 2
+            # 重试次数(次)
+            nb_get_retry 2
+            # 间隔时间(秒)
+            delay_before_retry 3
+        }
+    }
+}
+```
