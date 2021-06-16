@@ -4,8 +4,8 @@ layout: post
 ---   
 
 ## 李壮壮：后端研发工程师
-* 手机:13082800141
-* Email:printsnow@qq.com
+* 手机:15301921737
+* Email:lizhuangzhuang13@163.com
 * 博客:https://zlmlzz.gitee.io
 
 ## 教育背景
