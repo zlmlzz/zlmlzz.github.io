@@ -49,4 +49,49 @@ keywords: skywalking,监测工具
     * tomcat应用:修改`tomcat/bin/catalina.sh`的第一行`CATALINA_OPTS=$CATALINA_OPTS -javaagent:/home/user/agent/skywalking-agent.jar;export CATALINA_OPTS`
 
 ## agent配置
+### 配置方式
+* 系统属性(-D):使用`-Dskywalking.`+`agent.config配置文件中的key即可`,如:`java -javaagent:/skywalking-agent.jar -Dskywalking.agent.service_name=test -jar springboot.jar`
+* 代理选项:在JVM参数中的代理路径之后添加属性:`-javaagent:/skywalking-agent.jar=[option1]=[value1],[option2]=[value2]`,如:`java -javaagent:/skywalking-agent.jar=agent.service_name=test -jar springboot.jar`
+* 系统环境变量:`agent.config`文件中默认的大写值,都可以作为环境变量引用
+* 优先级:代理选项>系统属性>系统环境变量>配置文件
 
+## 插件
+* 监控spring bean将`apm-spring-annotation-plugin`文件拷贝到plugin下
+
+### 监控任意代码
+* 将`apm-customize-enhance-plugin`文件拷贝到plugin下
+* 编写规则
+
+```
+创建一个文件,名称如customize_enhance.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<enhanced>
+    <class class_name="test.Test">
+        <method method="test(java.lang.String,java.util.List;)" 
+        operation_name="/is_static_method_args" static="true">
+            <operation_name_suffix>arg[0]</operation_name_suffix>
+            <operation_name_suffix>arg[1]</operation_name_suffix>
+            <tag key="tag_1">arg[0]</tag>
+            <log key="log_1">arg[1]</log>
+        </method>
+    </class>
+</enhanced>
+
+注:method
+* 基本类型:基本类型.class,如int.class
+* 数组:通过打印类型得到
+```
+* 配置`agent.config`文件:`plugin.customize.enhance_file=customize_enhance.xml的绝对路径`
+
+### 编写插件
+* [点击跳转查看](https://www.itmuch.com/skywalking/write-plugin/)
+
+## 数据持久化
+* 配置skywalking的`application.yml`文件:`注释掉默认的h2,放开es配置`
+
+## 告警
+* [点击跳转查看](https://www.itmuch.com/skywalking/alert/)
+
+## 动态配置
+
+## 集群搭建
