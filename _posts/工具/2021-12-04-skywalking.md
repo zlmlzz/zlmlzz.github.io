@@ -96,5 +96,7 @@ keywords: skywalking,监测工具
 * [点击跳转查看](https://www.itmuch.com/skywalking/alert/)
 
 ## 动态配置
+* [点击跳转查看](https://www.itmuch.com/skywalking/dynamic-configuration/)
 
 ## 集群搭建
+* [点击跳转查看](https://www.itmuch.com/skywalking/cluster/)
