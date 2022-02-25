@@ -41,12 +41,12 @@ keywords: skywalking,监测工具
     * 找到skywalking包中的agent目录
     * 将agent目录拷贝到任意位置
     * 配置config/agent.config
-    ```
-    1.将agent.service_name修改为服务名称
-    2.如果skywalking和服务部署在不同服务器,
-    还需修改collector.backend_service的值,
-    该配置用来指定服务和skywalking通信的地址,默认是127.0.0.1:11800
-    ```
+```
+1.将agent.service_name修改为服务名称
+2.如果skywalking和服务部署在不同服务器,
+还需修改collector.backend_service的值,
+该配置用来指定服务和skywalking通信的地址,默认是127.0.0.1:11800
+```
 * 启动应用
     * spring boot应用`-javaagent:/home/user/agent/skywalking-agent.jar`jar包全路径
     * tomcat应用:修改`tomcat/bin/catalina.sh`的第一行`CATALINA_OPTS=$CATALINA_OPTS -javaagent:/home/user/agent/skywalking-agent.jar;export CATALINA_OPTS`
