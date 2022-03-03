@@ -4,3 +4,8 @@ Gemfile
 Gemfile.lock
 _posts/.MWebMetaData/
 _posts/common-problem/
+/.idea/.gitignore
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
+/.idea/zlmlzz.github.io.iml
