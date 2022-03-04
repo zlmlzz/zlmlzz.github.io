@@ -24,10 +24,6 @@ gitee: zlmlzz
 avatar: /assets/img/avatar.jpg
 favicon: /assets/imgs/
 
-# disqus config
-disqus:
-  shortname: suyan-zh
-
 # google analytics config
 ga:
   id: UA-54767140-1
