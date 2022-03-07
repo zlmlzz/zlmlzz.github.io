@@ -8,6 +8,7 @@ $(function() {
       main    = $('#main'),
       menu    = $('#menu'),
       posttoc = $('#post-toc-menu'),
+      baseUrl = '127.0.0.1:4000',
       x1, y1;
 
   // run this function after pjax load.
@@ -66,7 +67,57 @@ $(function() {
       });
     {% endif %}
     // your scripts
+    // 复制链接
+    $('.share.copy').bind("click",function (e) {
+      //创建input
+      var inputZ = document.createElement('input');
+      //添加Id,用于后续操作
+      inputZ.setAttribute('id', 'inputCopy');
+      //获取当前链接
+      inputZ.value = window.location.href;
+      //创建的input添加到body
+      document.body.appendChild(inputZ);
+      //选中input中的值
+      document.getElementById('inputCopy').select();
+      //把值复制下来
+      document.execCommand('Copy')
+      //删除添加的input
+      document.body.removeChild(inputZ);
+      $('.share.result').css("color", "red");
+    });
+
+    // 发表评论
+    $('.send').on("click",function () {
+      Setcookie("user", "test");
+      user = getCookie("user");
+      console.log(user);
+    });
   };
+
+  function Setcookie(name, value) {
+    //设置名称为name,值为value的Cookie
+    var expdate = new Date();   //初始化时间
+    expdate.setTime(expdate.getTime() + 30 * 60 * 1000);   //时间
+    document.cookie = name + "=" + value + ";expires=" + expdate.toGMTString() + ";path=/";
+  }
+
+  function getCookie(name) {
+    var prefix = name + "="
+    var start = document.cookie.indexOf(prefix)
+
+    if (start == -1) {
+      return null;
+    }
+
+    var end = document.cookie.indexOf(";", start + prefix.length)
+    if (end == -1) {
+      end = document.cookie.length;
+    }
+
+    var value = document.cookie.substring(start + prefix.length, end)
+    return unescape(value);
+  }
+
   afterPjax();
 
   // NProgress
@@ -128,14 +179,4 @@ $(function() {
     toc.hide();
     blogs.fadeIn(350);
   });
-
-  $('.share.copy').on('click',function (e) {
-    var input = $("<input value= "+window.location.href+">");
-    $("body").prepend(input);
-    $("body").find("input").eq(0).select();
-    document.execCommand("copy");
-    $("body").find("input").eq(0).remove();
-    $('.share.result').css("color","red");
-  });
-
 });
