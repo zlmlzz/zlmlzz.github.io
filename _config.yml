@@ -22,7 +22,7 @@ gitee: zlmlzz
 
 # avatar and Favicon
 avatar: /assets/img/avatar.jpg
-favicon: favicon.ico
+favicon: /favicon.ico
 
 # google analytics config
 ga:
