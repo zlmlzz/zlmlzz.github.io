@@ -129,4 +129,13 @@ $(function() {
     blogs.fadeIn(350);
   });
 
+  $('.share.copy').on('click',function (e) {
+    var input = $("<input value= "+window.location.href+">");
+    $("body").prepend(input);
+    $("body").find("input").eq(0).select();
+    document.execCommand("copy");
+    $("body").find("input").eq(0).remove();
+    $('.share.result').css("color","red");
+  });
+
 });
