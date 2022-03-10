@@ -1,0 +1,28 @@
+---
+title: 注册账户
+layout: post
+---
+<div class="user-module">
+    <form name="user" class="user">
+        <div class="nick-item">
+            <input name="nickName" id="nickName" placeholder="昵称">
+            <span class="nick-name-message"></span>
+        </div>
+        <div class="username-item">
+            <input name="username" id="username" placeholder="电子邮箱">
+            <span class="username-message" hidden="hidden">请输入正确的邮箱,长度2-50</span>
+        </div>
+        <div class="password-item">
+            <input type="password" id="password" name="password" placeholder="密码"/>
+            <span class="password-message" hidden="hidden">长度8-18，至少包含字母、数字、特殊符号中的两种</span>
+        </div>
+        <div class="pre-password-item">
+            <input type="password" id="prePassword" name="prePassword" placeholder="重复密码"/>
+            <span class="pre-password-message" hidden="hidden">两次密码输入不一致</span>
+        </div>
+        <div class="register-item">
+            <input type="button" value="注册" id="register" class="register-btn"/>
+            <span class="btn-message" hidden="hidden"></span>
+        </div>
+    </form>
+</div>

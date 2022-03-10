@@ -263,16 +263,6 @@
   text-align: center;
 }
 
-.login-item {
-  width: 20%;
-  display: inline-block;
-  position: relative;
-  font-size: 20px;
-  -webkit-box-align: center;
-  align-items: center;
-  text-align: center;
-}
-
 .top-nav-link {
   color: var(--cb-color-button-text-brand-secondary-text, #666);
   text-decoration: none;
@@ -301,3 +291,97 @@
   white-space: nowrap;
   line-height: normal;
 }
+
+.login-item {
+  width: 20%;
+  display: inline-block;
+  position: relative;
+  font-size: 20px;
+  -webkit-box-align: center;
+  align-items: center;
+  text-align: center;
+  height: 30px;
+  overflow: hidden;
+}
+
+.login-item:hover {
+  overflow: visible;
+}
+
+.login {
+  color: red;
+  overflow: hidden;
+}
+
+.login:before{
+  width: 30px;
+  height: 30px;
+  font-family: 'icomoon' !important;
+  content: "\e903";
+}
+
+.login:after{
+
+}
+
+.login:hover {
+  opacity: 1;
+  height: 150px;
+}
+
+.head-dropdown {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
+  z-index: 9999;
+}
+
+.head-dropdown a {
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  color: white;
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  background-color: #474d57;
+}
+
+.head-dropdown li:hover a {
+  background-color:red;
+}
+
+.user-module{
+  text-align:left;
+  vertical-align:middle;
+}
+
+.user input {
+  margin-bottom: 5px;
+  margin-top: 5px;
+  width: 400px;
+  height: 30px;
+  line-height: 28px;
+  font-size: 14px;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+}
+
+.register-btn ,.login-btn{
+  background: #0085c9;
+  color: #fff;
+  line-height: 30px;
+}
+
+.username-message,.password-message,.pre-password-message,.btn-message {
+  width: 400px;
+  font-size: 12px;
+  color: red;
+}
+
+.to-register-item {
+  width: 400px;
+  text-align: center;
+}
+

@@ -3,12 +3,13 @@ layout: null
 ---
 
 $(function() {
-  var toc     = $('.toc-link'),
+  var toc = $('.toc-link'),
       sidebar = $('#sidebar'),
-      main    = $('#main'),
-      menu    = $('#menu'),
+      main = $('#main'),
+      menu = $('#menu'),
       posttoc = $('#post-toc-menu'),
-      baseUrl = '127.0.0.1:4000',
+      baseUrl = 'http://127.0.0.1:3000/front/',
+      home = 'http://127.0.0.1:4000',
       x1, y1;
 
   // run this function after pjax load.
@@ -48,24 +49,6 @@ $(function() {
       main.animate({scrollTop: target.offset().top + main.scrollTop() - 70}, 500);
     });
 
-    // discus comment.
-    {% if site.disqus.shortname %}
-      var ds_loaded = false;
-      window.disqus_shortname = "{{ site.disqus.shortname }}";
-      main.scroll(function(){
-        var nScrollHight = $(this)[0].scrollHeight;
-        var nScrollTop = $(this)[0].scrollTop;
-        if(!ds_loaded && nScrollTop + main.height() >= nScrollHight - 100) {
-          $.ajax({
-            type: 'GET',
-            url: 'http://' + disqus_shortname + '.disqus.com/embed.js',
-            dataType: 'script',
-            cache: true
-          });
-          ds_loaded = true;
-        }
-      });
-    {% endif %}
     // your scripts
     // 复制链接
     $('.share.copy').bind("click",function (e) {
@@ -86,15 +69,183 @@ $(function() {
       $('.share.result').css("color", "red");
     });
 
+    // 电子邮箱校验
+    $('#username').on("change", function () {
+      var email = $('#username').val();
+      if (checkEmail(email)) {
+        $('.username-message').hide();
+      } else {
+        $('.username-message').show();
+      }
+    });
+
+    // 密码校验
+    $('#password').on("change", function () {
+      var password = $('#password').val();
+      var reg = new RegExp("^(?![a-zA-z]+$)(?!\\d+$)(?![!@#$%^&*]+$)[a-zA-Z\\d!@#$%^&*]+$");
+      if (password && password.length >= 8 && password.length <= 50 && password.length <= 50 && reg.test(password)) {
+        $('.password-message').hide();
+      } else {
+        $('.password-message').show();
+      }
+    });
+
+    // 重复密码
+    $('#prePassword').on("change", function () {
+      var prePassword = $('#prePassword').val();
+      var password = $('#password').val();
+      if (prePassword === password) {
+        $('.pre-password-message').hide();
+      } else {
+        $('.pre-password-message').show();
+      }
+    });
+
     // 发表评论
     $('.send').on("click",function () {
-      Setcookie("user", "test");
-      user = getCookie("user");
-      console.log(user);
+      if (online()) {
+        // 调用发表评论接口
+      } else {
+        // 重定向登录地址
+      }
     });
+
+    // 注册
+    $('#register').on("click", function () {
+      var data = {
+        "username": $('#username').val(),
+        "password": $('#password').val(),
+        "prePassword": $('#prePassword').val(),
+        "nickName": $('#nickName').val()
+      };
+      if (!check(data)) {
+        return;
+      }
+      $.ajax({
+        type: "POST",
+        url: baseUrl + "register",
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+          alert(data);
+          window.location.href = home;
+        },
+        error: function (data) {
+          console.log(data);
+        }
+      });
+    });
+
+    // 登录
+    $('#login').on("click", function () {
+      var data = {
+        "username": $('#username').val(),
+        "password": $('#password').val()
+      };
+      if (!check(data)) {
+        return;
+      }
+      $.ajax({
+        type: "POST",
+        url: baseUrl + "login",
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+          if (data.message === "success") {
+            setCookie("token", data.token);
+            window.location.href = home;
+          } else {
+            $('.btn-message').text(data.message);
+            $('.btn-message').show();
+          }
+        },
+        error: function (data) {
+          console.log(data);
+        }
+      });
+    });
+
+    // 退出登录
+    $('.exit').on("click", function () {
+      var url = baseUrl + "exit?token=" + getCookie("token");
+      $.ajax({
+        type: "POST",
+        url: url,
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+          if ("success" === data) {
+            clearCookie("token");
+            window.location.href = home;
+          }
+        },
+        error: function (data) {
+          console.log(data);
+          return false;
+        }
+      });
+    });
+
   };
 
-  function Setcookie(name, value) {
+  function check(data) {
+    return checkEmail(data.username) && checkPassword(data);
+  }
+
+  function checkEmail(email) {
+    var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$"); //正则表达式
+    return email && email.length <= 50 && reg.test(email);
+  }
+
+  function checkPassword(data) {
+    var reg = new RegExp("^(?![a-zA-z]+$)(?!\\d+$)(?![!@#$%^&*]+$)[a-zA-Z\\d!@#$%^&*]+$");
+    var password = data.password;
+    var prePassword = data.prePassword;
+    if (prePassword) {
+      return password === prePassword && password
+          && password.length >= 8 && password.length <= 50 && password.length <= 50 && reg.test(password);
+    } else {
+      return password.length >= 8 && password.length <= 50 && password.length <= 50 && reg.test(password);
+    }
+  }
+
+  //清除cookie
+  function clearCookie(name) {
+    setCookie(name, "", -1);
+  }
+
+  function publish() {
+    $('#contentId').val("test");
+  }
+
+  function online() {
+    var token = getCookie("token");
+    if (token) {
+      $.ajax({
+        type: "POST",
+        url: baseUrl + "online?token=" + token,
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+          adjust(data);
+        },
+        error: function () {
+          return false;
+        }
+      });
+    } else {
+      adjust(false);
+    }
+  }
+
+  function adjust(online) {
+    if (online) {
+      $('#login-btn').hide();
+      $('#register-btn').hide();
+    } else {
+      $('#exit-btn').hide();
+    }
+  }
+
+  function setCookie(name, value) {
     //设置名称为name,值为value的Cookie
     var expdate = new Date();   //初始化时间
     expdate.setTime(expdate.getTime() + 30 * 60 * 1000);   //时间
@@ -179,4 +330,6 @@ $(function() {
     toc.hide();
     blogs.fadeIn(350);
   });
+
+  online();
 });

@@ -2,6 +2,7 @@
 layout: default
 ---
 <article class="post container">
+    <div id="contentId" hidden="true"></div>
   <div class="post-meta">
     <span class="post-meta-span date">{{ page.date | date:"%Y %B %d" }}</span>
     {% if page.tags.size > 0 %}
@@ -42,7 +43,7 @@ layout: default
                         
                     </div>
                     <div class="x-interact-publish-opt no-radio">
-                        <span class="send disabled">发表</span>
+                        <span class="send enable">发表</span>
                     </div>
                 </div>
             </div></div>
