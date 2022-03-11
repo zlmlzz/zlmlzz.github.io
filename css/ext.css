@@ -273,7 +273,7 @@
 }
 
 .item {
-  width: 20%;
+  width: 30%;
   display: inline-block;
   position: relative;
   font-size: 20px;
@@ -312,7 +312,7 @@
 }
 
 .login-item {
-  width: 20%;
+  width: 30%;
   display: inline-block;
   position: relative;
   font-size: 20px;
