@@ -355,6 +355,10 @@ $(function() {
   }
 
   function adjust(online) {
+    var url = window.location.href;
+    if (url.indexOf("about-me") || url.indexOf("suggestions")) {
+      $('.post-share').hide();
+    }
     if (online) {
       $('#login-btn').hide();
       $('#register-btn').hide();
