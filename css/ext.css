@@ -77,7 +77,26 @@
   cursor: not-allowed;
 }
 
+.x-interact-publish .reply.disabled {
+  opacity: .2;
+  cursor: not-allowed;
+}
+
 .x-interact-publish .send {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 14px;
+  text-align: center;
+  color: #fff;
+  background: #4e6ef2;
+  border-radius: 6px;
+}
+
+.x-interact-publish .reply {
   position: absolute;
   top: 0;
   right: 0;
@@ -385,3 +404,39 @@
   text-align: center;
 }
 
+/* 回复 */
+.x-interact-publish {
+  width: 100%;
+  font-size: 13px;
+  color: #222;
+}
+
+.x-interact-publish-cont {
+  display: flex;
+  width: 100%;
+  background: #f5f5f6;
+  border-radius: 12px;
+}
+
+.x-interact-publish .text-area {
+  padding: 16px 16px 23px;
+  width: 100%;
+  resize: none;
+  background: #f5f5f6;
+  border-radius: 12px;
+  border: none;
+  color: #1f1f1f;
+}
+
+.x-interact-publish-panel-center {
+  padding-top: 4px;
+}
+
+.x-interact-publish-opt {
+  position: relative;
+  display: flex;
+  height: 30px;
+  -webkit-box-align: center;
+  align-items: center;
+  margin-top: 8px;
+}
