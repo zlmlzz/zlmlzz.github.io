@@ -102,20 +102,60 @@ $(function() {
     });
 
     // 发表评论
-    $('.send').on("click",function () {
+    /*$('.send').on("click",function () {
       if (online()) {
-        // 调用发表评论接口
+        var content = $('.text-area').val();
+        if (content == null || "" === content.trim()) {
+          $('.text-area').attr("placeholder", "请输入评论");
+          return;
+        }
+        var data = {
+          "unique": $('#unique').val(),
+          "token": getCookie("token"),
+          "content": content,
+          "pId": ""
+        };
+        $.ajax({
+          type: "POST",
+          url: baseUrl + "publish",
+          data: JSON.stringify(data),
+          contentType: "application/json; charset=utf-8",
+          success: function (data) {
+          },
+          error: function (data) {
+            console.log(data);
+          }
+        });
       } else {
-        window.location.href = home + "/login.html";
+        var targetUrl = window.location.href;
+        window.location.href = home + "/login.html?target=" + targetUrl;
       }
-    });
+    });*/
 
     // 回复
     $(document).on("click", ".send", function () {
       if (online()) {
-        // 调用回复接口
+        var data = {
+          "unique": $('#unique').val(),
+          "token": getCookie("token"),
+          "pId": $(this).parents('.right').eq(0).prevAll('input').eq(0).val(),
+          "content": $(this).parents('.right').eq(0).find("textarea").eq(0).val()
+        };
+        $.ajax({
+          type: "POST",
+          url: baseUrl + "publish",
+          data: JSON.stringify(data),
+          contentType: "application/json; charset=utf-8",
+          success: function (data) {
+            refreshCommentModule();
+          },
+          error: function (data) {
+            console.log(data);
+          }
+        });
       } else {
-        window.location.href = home + "/login.html";
+        var targetUrl = window.location.href;
+        window.location.href = home + "/login.html?target=" + targetUrl;
       }
     });
 
@@ -163,7 +203,8 @@ $(function() {
         success: function (data) {
           if (data.message === "success") {
             setCookie("token", data.token);
-            window.location.href = home;
+            var url = getUrlParam("target");
+            window.location.href = url ? url : home;
           } else {
             $('.btn-message').text(data.message);
             $('.btn-message').show();
@@ -194,6 +235,8 @@ $(function() {
         }
       });
     });
+
+    list();
 
   };
 
@@ -227,136 +270,118 @@ $(function() {
     $('#contentId').val("test");
   }
 
-  function online() {
-    var token = getCookie("token");
-    if (token) {
-      $.ajax({
-        type: "POST",
-        url: baseUrl + "online?token=" + token,
-        contentType: "application/json; charset=utf-8",
-        success: function (data) {
-          adjust(data);
-        },
-        error: function () {
-          return false;
+  function list() {
+
+    $.ajax({
+      type: "POST",
+      url: baseUrl + "comments",
+      data: $('#unique').val() === "" ? "suggestions" : $('#unique').val(),
+      contentType: "application/json; charset=utf-8",
+      success: function (data) {
+        if (data && data.size > 0) {
+          var html = '<h2 class="xcp-list-title">评论列表(' + data.size + '条)</h2>'
+              + '        <div class="xcp-list-list">';
+          for (var i = 0; i < data.list.length; i++) {
+            var item = data.list[i];
+            html = html +
+                '            <div class="xcp-item">' +
+                '<input hidden="hidden" value="' + item.id + '">' +
+                '                <div class="left">' +
+                '                    <div class="x-avatar">' +
+                '                        <div class="x-avatar-placeholder"></div>' +
+                '                        <div class="x-avatar-img"' +
+                '                             style="background-image: url(' + item.imageUrl + ')"></div>' +
+                '                    </div>' +
+                '                </div>' +
+                '                <div class="right">' +
+                '                    <div class="user-bar">' +
+                '                        <h5 class="user-bar-uname">' + item.nickName + '</h5>' +
+                '                    </div>' +
+                '                    <div class="x-interact-rich-text rich-text">' +
+                '                        <span class="type-text">' + item.content + '</span>' +
+                '                    </div>' +
+                '                    <div class="interact-bar">' +
+                '                        <div class="interact-bar-left">' +
+                '                            <span class="time">' + item.time + '</span>' +
+                '                            <span class="report">举报</span>' +
+                '                        </div>' +
+                '                        <div class="interact-bar-right">' +
+                '                            <div class="reply">' +
+                '                                <i class="icon reply-icon"></i>' +
+                '                                <span class="reply-text">回复</span>' +
+                '                            </div>' +
+                '                            <div class="like ">' +
+                '                                <i class="icon like-icon"></i>' +
+                '                                <span class="like-text">' + item.likeText + '</span>' +
+                '                            </div>' +
+                '                        </div></div>';
+            if (item && item.child && item.child.length > 0) {
+              html = html + '                    <div class="xcp-list">' +
+                  '                        <div class="xcp-list-list is-second">';
+              for (var j = 0; j < item.child.length; j++) {
+                var child = item.child[j];
+                html = html +
+                    '                            <div class="xcp-item">' +
+                    '<input hidden="hidden" value="' + child.itemId + '">' +
+                    '                                <div class="left">' +
+                    '                                    <div class="x-avatar is-small">' +
+                    '                                        <div class="x-avatar-placeholder"></div>' +
+                    '                                        <div class="x-avatar-img"' +
+                    '                                             style="background-image: url(' + child.itemImageUrl + ')"></div>' +
+                    '                                    </div>' +
+                    '                                </div>' +
+                    '                                <div class="right">' +
+                    '                                    <div class="user-bar">' +
+                    '                                        <h5 class="user-bar-uname">' + child.itemNickName + '</h5>' +
+                    '                                    </div>' +
+                    '                                    <div class="x-interact-rich-text rich-text"' +
+                    '                                         >' +
+                    '                                        <span class="type-text">' + child.itemContent + '</span>' +
+                    '                                    </div>' +
+                    '                                    <div class="interact-bar">' +
+                    '                                        <div class="interact-bar-left">' +
+                    '                                            <span class="time">' + child.itemTime + '</span>' +
+                    '                                            <span class="report">举报</span>' +
+                    '                                        </div>' +
+                    '                                        <div class="interact-bar-right">' +
+                    '                                            <div class="reply">' +
+                    '                                                <i class="icon reply-icon"></i>' +
+                    '                                            </div>' +
+                    '                                            <div class="like ">' +
+                    '                                                <i class="icon like-icon"></i>' +
+                    '                                                <span class="like-text">' + child.itemLikeText + '</span>' +
+                    '                                            </div>' +
+                    '                                        </div>' +
+                    '                                    </div>' +
+                    '                                </div>' +
+                    '                            </div>';
+              }
+              html = html + '</div></div></div>';
+            }
+            html = html + '</div></div>';
+          }
+          html = html + '</div>';
+          $('.xcp-list').append(html);
         }
-      });
-    } else {
-      adjust(false);
-    }
+      },
+      error: function (data) {
+        console.log(data);
+      }
+    });
   }
 
-  function list() {
-    var data = {
-      "size": 281,
-      "list": [{
-        "id": 1,
-        "imageUrl": "https://himg.bdimg.com/sys/portrait/item/wise.1.27fe2bb5.7hXDYeTK0d3OIahW6MztlA.jpg?time=7402",
-        "nickName": "zhangnan1111ai",
-        "time": "1小时前",
-        "likeText": 1948,
-        "content": "然而没有，都是缓兵之计，一个等白俄罗斯和车臣增兵，一个等国际雇佣兵登场。",
-        "child": [{
-          "id": 2,
-          "imageUrl": "https://himg.bdimg.com/sys/portrait/item/wise.1.eec5bf39.edtuVzcQyQNNohDE2HIdlg.jpg?time=3635",
-          "nickName": "蓝浩洋",
-          "time": "14分钟前",
-          "content": "斯拉夫",
-          "likeText": "赞"
-        }]
-      }]
-    };
-
-    if (data && data.size > 0) {
-      var html = '<h2 class="xcp-list-title">评论列表(' + data.size + '条)</h2>'
-          + '        <div class="xcp-list-list">';
-      for (var i = 0; i < data.list.length; i++) {
-        var item = data.list[i];
-        html = html +
-            '            <div class="xcp-item">' +
-            '<input hidden="hidden" value="' + item.id + '">' +
-            '                <div class="left">' +
-            '                    <div class="x-avatar">' +
-            '                        <div class="x-avatar-placeholder"></div>' +
-            '                        <div class="x-avatar-img"' +
-            '                             style="background-image: url(' + item.imageUrl + ')"></div>' +
-            '                    </div>' +
-            '                </div>' +
-            '                <div class="right">' +
-            '                    <div class="user-bar">' +
-            '                        <h5 class="user-bar-uname">' + item.nickName + '</h5>' +
-            '                    </div>' +
-            '                    <div class="x-interact-rich-text rich-text">' +
-            '                        <span class="type-text">' + item.content + '</span>' +
-            '                    </div>' +
-            '                    <div class="interact-bar">' +
-            '                        <div class="interact-bar-left">' +
-            '                            <span class="time">' + item.time + '</span>' +
-            '                            <span class="report">举报</span>' +
-            '                        </div>' +
-            '                        <div class="interact-bar-right">' +
-            '                            <div class="reply">' +
-            '                                <i class="icon reply-icon"></i>' +
-            '                                <span class="reply-text">回复</span>' +
-            '                            </div>' +
-            '                            <div class="like ">' +
-            '                                <i class="icon like-icon"></i>' +
-            '                                <span class="like-text">' + item.likeText + '</span>' +
-            '                            </div>' +
-            '                        </div></div>';
-        if (item && item.child && item.child.length > 0) {
-          html = html + '                    <div class="xcp-list">' +
-              '                        <div class="xcp-list-list is-second">';
-          for (var j = 0; j < item.child.length; j++) {
-            var child = item.child[j];
-            html = html +
-                '                            <div class="xcp-item">' +
-                '<input hidden="hidden" value="' + child.id + '">' +
-                '                                <div class="left">' +
-                '                                    <div class="x-avatar is-small">' +
-                '                                        <div class="x-avatar-placeholder"></div>' +
-                '                                        <div class="x-avatar-img"' +
-                '                                             style="background-image: url(' + child.imageUrl + ')"></div>' +
-                '                                    </div>' +
-                '                                </div>' +
-                '                                <div class="right">' +
-                '                                    <div class="user-bar">' +
-                '                                        <h5 class="user-bar-uname">' + child.nickName + '</h5>' +
-                '                                    </div>' +
-                '                                    <div class="x-interact-rich-text rich-text"' +
-                '                                         >' +
-                '                                        <span class="type-text">' + child.content + '</span>' +
-                '                                    </div>' +
-                '                                    <div class="interact-bar">' +
-                '                                        <div class="interact-bar-left">' +
-                '                                            <span class="time">' + child.time + '</span>' +
-                '                                            <span class="report">举报</span>' +
-                '                                        </div>' +
-                '                                        <div class="interact-bar-right">' +
-                '                                            <div class="reply">' +
-                '                                                <i class="icon reply-icon"></i>' +
-                '                                            </div>' +
-                '                                            <div class="like ">' +
-                '                                                <i class="icon like-icon"></i>' +
-                '                                                <span class="like-text">' + child.likeText + '</span>' +
-                '                                            </div>' +
-                '                                        </div>' +
-                '                                    </div>' +
-                '                                </div>' +
-                '                            </div>';
-          }
-          html = html + '</div></div>';
-        }
-        html = html + '</div>';
-      }
-      html = html + '</div>';
-      $('.xcp-list').append(html);
-    }
+  function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = decodeURI(window.location.search).substr(1).match(reg); //匹配目标参数
+    if (r != null) return unescape(r[2]); return null; //返回参数值
   }
 
   function adjust(online) {
     var url = window.location.href;
-    if (url.indexOf("about-me") || url.indexOf("suggestions")) {
+    if (contains(url, "about-me") || contains(url, "index.html") || contains(url, "about-site")) {
+      $('#commentModule').hide();
+    }
+    if (contains(url, "about-me") || contains(url, "suggestions")) {
       $('.post-share').hide();
     }
     if (online) {
@@ -365,12 +390,21 @@ $(function() {
     } else {
       $('#exit-btn').hide();
     }
+    $('.xcp-publish').find('.x-avatar-img').eq(0).css("background-image",
+        "url('https://www.fancyei.com/assets/img/qrcode.jpg')");
+  }
+
+  function contains(str,subStr) {
+    if (str === undefined || str === null) {
+      return false;
+    }
+    return str.indexOf(subStr) !== -1;
   }
 
   function setCookie(name, value) {
     //设置名称为name,值为value的Cookie
     var expdate = new Date();   //初始化时间
-    expdate.setTime(expdate.getTime() + 30 * 60 * 1000);   //时间
+    expdate.setTime(expdate.getTime() + 24 * 60 * 60 * 1000);   //时间
     document.cookie = name + "=" + value + ";expires=" + expdate.toGMTString() + ";path=/";
   }
 
@@ -454,9 +488,8 @@ $(function() {
   });
 
   online();
-  list();
   // 回复
-  $('.reply-text').on("click", function () {
+  $(document).on("click", ".reply-text", function () {
     var val = $(this).text();
     var interactBar = $(this).parents('.interact-bar');
     if ("回复" === val) {
@@ -481,5 +514,34 @@ $(function() {
       interactBar.next().remove();
     }
   });
+
+  function online() {
+    var token = getCookie("token");
+    if (token) {
+      $.ajax({
+        type: "POST",
+        url: baseUrl + "online?token=" + token,
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+          adjust(data);
+        },
+        error: function () {
+          return false;
+        }
+      });
+    } else {
+      adjust(false);
+      return false;
+    }
+    return true;
+  }
+
+  function refreshCommentModule() {
+    var textarea = $('#commentModule').find('textarea').eq(0);
+    textarea.val("");
+    textarea.attr("placeholder", "发表神评秒论");
+    $('#commentModule').children(".xcp-list").eq(0).empty();
+    list();
+  }
 
 });
