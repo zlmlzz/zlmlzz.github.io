@@ -166,6 +166,7 @@ $(function() {
     // 注册
     $('#register').on("click", function () {
         var href = window.location.href;
+      href = href.substr(0, href.indexOf("register.html"));
       var data = {
         "username": $('#username').val(),
         "password": $('#password').val(),
@@ -197,6 +198,7 @@ $(function() {
     // 登录
     $('#login').on("click", function () {
       var href = window.location.href;
+      href = href.substr(0, href.indexOf("login.html"));
       var data = {
         "username": $('#username').val(),
         "password": $('#password').val()
