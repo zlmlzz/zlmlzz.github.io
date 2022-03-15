@@ -140,7 +140,7 @@ $(function() {
         $('#toc > a').each(function () {
           var href = $(this).attr('href');
           if (contains(uri, href)) {
-            unique = $(this).attr('data-tags') + '/' + $(this).html();
+            unique = $(this).attr('data-tags').trim() + '/' + $(this).html().trim();
             return false;
           }
         });
@@ -304,7 +304,7 @@ $(function() {
     $('#toc > a').each(function () {
       var href = $(this).attr('href');
       if (contains(uri, href)) {
-        unique = $(this).attr('data-tags') + '/' + $(this).html();
+        unique = $(this).attr('data-tags').trim() + '/' + $(this).html().trim();
         return false;
       }
     });
