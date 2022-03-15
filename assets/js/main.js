@@ -101,77 +101,6 @@ $(function() {
       }
     });
 
-    // 发表评论
-    /*$('.send').on("click",function () {
-      if (online()) {
-        var content = $('.text-area').val();
-        if (content == null || "" === content.trim()) {
-          $('.text-area').attr("placeholder", "请输入评论");
-          return;
-        }
-        var data = {
-          "unique": $('#unique').val(),
-          "token": getCookie("token"),
-          "content": content,
-          "pId": ""
-        };
-        $.ajax({
-          type: "POST",
-          url: baseUrl + "publish",
-          data: JSON.stringify(data),
-          contentType: "application/json; charset=utf-8",
-          success: function (data) {
-          },
-          error: function (data) {
-            console.log(data);
-          }
-        });
-      } else {
-        var targetUrl = window.location.href;
-        window.location.href = home + "/login.html?target=" + targetUrl;
-      }
-    });*/
-
-    // 回复
-    $(document).on("click", ".send", function () {
-      if (online()) {
-        var unique;
-        var uri = getUrlRelativePath();
-        $('#toc > a').each(function () {
-          var href = $(this).attr('href');
-          if (contains(uri, href)) {
-            unique = $(this).attr('data-tags').trim() + '/' + $(this).html().trim();
-            return false;
-          }
-        });
-        var data = {
-          "unique": unique,
-          "token": getCookie("token"),
-          "pId": $(this).parents('.right').eq(0).prevAll('input').eq(0).val(),
-          "content": $(this).parents('.right').eq(0).find("textarea").eq(0).val()
-        };
-        $.ajax({
-          type: "POST",
-          url: baseUrl + "publish",
-          data: JSON.stringify(data),
-          contentType: "application/json; charset=utf-8",
-          beforeSend: function (request) {
-            request.setRequestHeader("token", getCookie("token"));
-          },
-          success: function (data) {
-            refreshCommentModule();
-          },
-          error: function (data) {
-            console.log(data);
-          }
-        });
-      } else {
-        var targetUrl = window.location.href;
-        window.location.href = home + "/login.html?target=" + targetUrl;
-      }
-    });
-
-
     // 注册
     $('#register').on("click", function () {
         var href = window.location.href;
@@ -599,5 +528,44 @@ $(function() {
     }
     return relUrl;
   }
+
+  // 回复
+  $(document).on("click", ".send", function () {
+    if (online()) {
+      var unique;
+      var uri = getUrlRelativePath();
+      $('#toc > a').each(function () {
+        var href = $(this).attr('href');
+        if (contains(uri, href)) {
+          unique = $(this).attr('data-tags').trim() + '/' + $(this).html().trim();
+          return false;
+        }
+      });
+      var data = {
+        "unique": unique,
+        "token": getCookie("token"),
+        "pId": $(this).parents('.right').eq(0).prevAll('input').eq(0).val(),
+        "content": $(this).parents('.right').eq(0).find("textarea").eq(0).val()
+      };
+      $.ajax({
+        type: "POST",
+        url: baseUrl + "publish",
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        beforeSend: function (request) {
+          request.setRequestHeader("token", getCookie("token"));
+        },
+        success: function (data) {
+          refreshCommentModule();
+        },
+        error: function (data) {
+          console.log(data);
+        }
+      });
+    } else {
+      var targetUrl = window.location.href;
+      window.location.href = home + "/login.html?target=" + targetUrl;
+    }
+  });
 
 });
