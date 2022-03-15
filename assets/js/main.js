@@ -135,8 +135,17 @@ $(function() {
     // 回复
     $(document).on("click", ".send", function () {
       if (online()) {
+        var unique;
+        var uri = getUrlRelativePath();
+        $('#toc > a').each(function () {
+          var href = $(this).attr('href');
+          if (contains(uri, href)) {
+            unique = $(this).attr('data-tags') + '/' + $(this).html();
+            return false;
+          }
+        });
         var data = {
-          "unique": $('#unique').val(),
+          "unique": unique,
           "token": getCookie("token"),
           "pId": $(this).parents('.right').eq(0).prevAll('input').eq(0).val(),
           "content": $(this).parents('.right').eq(0).find("textarea").eq(0).val()
@@ -290,11 +299,19 @@ $(function() {
   }
 
   function list() {
-
+    var unique = "";
+    var uri = getUrlRelativePath();
+    $('#toc > a').each(function () {
+      var href = $(this).attr('href');
+      if (contains(uri, href)) {
+        unique = $(this).attr('data-tags') + '/' + $(this).html();
+        return false;
+      }
+    });
     $.ajax({
       type: "POST",
       url: baseUrl + "comments",
-      data: $('#unique').val() === "" ? "suggestions" : $('#unique').val(),
+      data: unique === "" ? "suggestions" : unique,
       contentType: "application/json; charset=utf-8",
       beforeSend: function (request) {
         request.setRequestHeader("token", getCookie("token"));
@@ -567,6 +584,20 @@ $(function() {
     textarea.attr("placeholder", "发表神评秒论");
     $('#commentModule').children(".xcp-list").eq(0).empty();
     list();
+  }
+
+  function getUrlRelativePath() {
+    var url = document.location.toString();
+    var arrUrl = url.split("//");
+    var start = arrUrl[1].indexOf("/");
+    var relUrl = arrUrl[1].substring(start);//stop省略，截取从start开始到结尾的所有字符
+    if (relUrl.indexOf("?") !== -1) {
+      relUrl = relUrl.split("?")[0];
+    }
+    if (relUrl.indexOf("#") !== -1) {
+      relUrl = relUrl.split("#")[0];
+    }
+    return relUrl;
   }
 
 });
