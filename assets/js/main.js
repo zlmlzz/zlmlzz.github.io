@@ -10,6 +10,7 @@ $(function() {
       posttoc = $('#post-toc-menu'),
       baseUrl = 'https://www.fancyei.com/front/',
       home = 'https://www.fancyei.com',
+      unique = '',
       x1, y1;
 
   // run this function after pjax load.
@@ -228,15 +229,7 @@ $(function() {
   }
 
   function list() {
-    var unique = "";
-    var uri = getUrlRelativePath();
-    $('#toc > a').each(function () {
-      var href = $(this).attr('href');
-      if (contains(uri, href)) {
-        unique = $(this).attr('data-tags').trim() + '/' + $(this).html().trim();
-        return false;
-      }
-    });
+    getUnique();
     $.ajax({
       type: "POST",
       url: baseUrl + "comments",
@@ -519,6 +512,10 @@ $(function() {
   }
 
   function getUrlRelativePath() {
+    return encodeURI(getRelativePath());
+  }
+
+  function getRelativePath() {
     var url = document.location.toString();
     var arrUrl = url.split("//");
     var start = arrUrl[1].indexOf("/");
@@ -532,18 +529,14 @@ $(function() {
     return relUrl;
   }
 
+  function getUrlRelativePath2() {
+    return decodeURI(getRelativePath());
+  }
+
   // 回复
   $(document).on("click", ".send", function () {
     if (online()) {
-      var unique;
-      var uri = getUrlRelativePath();
-      $('#toc > a').each(function () {
-        var href = $(this).attr('href');
-        if (contains(uri, href)) {
-          unique = $(this).attr('data-tags').trim() + '/' + $(this).html().trim();
-          return false;
-        }
-      });
+      getUnique();
       var data = {
         "unique": unique,
         "token": getCookie("token"),
@@ -570,5 +563,15 @@ $(function() {
       window.location.href = home + "/login.html?target=" + targetUrl;
     }
   });
+
+  function getUnique() {
+    $('#toc > a').each(function () {
+      var href = $(this).attr('href');
+      if (contains(getUrlRelativePath(), href) || contains(getUrlRelativePath2(), href)) {
+        unique = $(this).attr('data-tags').trim() + '/' + $(this).html().trim();
+        return false;
+      }
+    });
+  }
 
 });
