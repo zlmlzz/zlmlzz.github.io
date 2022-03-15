@@ -346,6 +346,9 @@ $(function() {
 
   function adjust(online) {
     var url = window.location.href;
+    if (contains(url, "zlmlzz")) {
+      $('.footer').hide();
+    }
     if (contains(url, "about-me") || contains(url, "index.html") || contains(url, "about-site")) {
       $('#commentModule').hide();
     }
