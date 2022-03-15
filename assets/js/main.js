@@ -165,6 +165,7 @@ $(function() {
 
     // 注册
     $('#register').on("click", function () {
+        var href = window.location.href;
       var data = {
         "username": $('#username').val(),
         "password": $('#password').val(),
@@ -184,7 +185,8 @@ $(function() {
         },
         success: function (data) {
           alert(data);
-          window.location.href = home;
+          var urlParam = getUrlParam("target");
+          window.location.href = urlParam ? urlParam : href;
         },
         error: function (data) {
           console.log(data);
@@ -194,6 +196,7 @@ $(function() {
 
     // 登录
     $('#login').on("click", function () {
+      var href = window.location.href;
       var data = {
         "username": $('#username').val(),
         "password": $('#password').val()
@@ -213,7 +216,7 @@ $(function() {
           if (data.message === "success") {
             setCookie("token", data.token);
             var url = getUrlParam("target");
-            window.location.href = url ? url : home;
+            window.location.href = url ? url : href;
           } else {
             $('.btn-message').text(data.message);
             $('.btn-message').show();
@@ -227,6 +230,7 @@ $(function() {
 
     // 退出登录
     $('.exit').on("click", function () {
+      var href = window.location.href;
       var url = baseUrl + "exit?token=" + getCookie("token");
       $.ajax({
         type: "POST",
@@ -238,7 +242,8 @@ $(function() {
         success: function (data) {
           if ("success" === data) {
             clearCookie("token");
-            window.location.href = home;
+            var urlParam = getUrlParam("target");
+            window.location.href = urlParam ? urlParam : href;
           }
         },
         error: function (data) {
