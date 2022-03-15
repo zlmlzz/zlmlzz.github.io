@@ -8,8 +8,8 @@ $(function() {
       main = $('#main'),
       menu = $('#menu'),
       posttoc = $('#post-toc-menu'),
-      baseUrl = 'http://127.0.0.1:3000/front/',
-      home = 'http://127.0.0.1:4000',
+      baseUrl = 'https://www.fancyei.com/front/',
+      home = 'https://www.fancyei.com',
       x1, y1;
 
   // run this function after pjax load.
@@ -146,6 +146,9 @@ $(function() {
           url: baseUrl + "publish",
           data: JSON.stringify(data),
           contentType: "application/json; charset=utf-8",
+          beforeSend: function (request) {
+            request.setRequestHeader("token", getCookie("token"));
+          },
           success: function (data) {
             refreshCommentModule();
           },
@@ -176,6 +179,9 @@ $(function() {
         url: baseUrl + "register",
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
+        beforeSend: function (request) {
+          request.setRequestHeader("token", getCookie("token"));
+        },
         success: function (data) {
           alert(data);
           window.location.href = home;
@@ -200,6 +206,9 @@ $(function() {
         url: baseUrl + "login",
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
+        beforeSend: function (request) {
+          request.setRequestHeader("token", getCookie("token"));
+        },
         success: function (data) {
           if (data.message === "success") {
             setCookie("token", data.token);
@@ -223,6 +232,9 @@ $(function() {
         type: "POST",
         url: url,
         contentType: "application/json; charset=utf-8",
+        beforeSend: function (request) {
+          request.setRequestHeader("token", getCookie("token"));
+        },
         success: function (data) {
           if ("success" === data) {
             clearCookie("token");
@@ -277,6 +289,9 @@ $(function() {
       url: baseUrl + "comments",
       data: $('#unique').val() === "" ? "suggestions" : $('#unique').val(),
       contentType: "application/json; charset=utf-8",
+      beforeSend: function (request) {
+        request.setRequestHeader("token", getCookie("token"));
+      },
       success: function (data) {
         if (data && data.size > 0) {
           var html = '<h2 class="xcp-list-title">评论列表(' + data.size + '条)</h2>'
@@ -522,6 +537,9 @@ $(function() {
         type: "POST",
         url: baseUrl + "online?token=" + token,
         contentType: "application/json; charset=utf-8",
+        beforeSend: function (request) {
+          request.setRequestHeader("token", getCookie("token"));
+        },
         success: function (data) {
           adjust(data);
         },
