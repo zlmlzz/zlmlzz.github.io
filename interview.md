@@ -11,7 +11,6 @@ layout: post
 
 ## 专业技能
 * 基础:熟悉Java,JVM,并发和集合等,无障碍阅读英文技术文档
-* test
 * 框架及组件:熟悉后端框架Spring,Spring MVC,Mybatis,Spring Boot,Spring Cloud
 * 熟悉后端中间件和工具Tomcat,nginx,ELK,rabbitMQ,fastdfs等
 * 熟悉数据库MySQL,redis等
