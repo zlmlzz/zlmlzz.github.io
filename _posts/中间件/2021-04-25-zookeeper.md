@@ -3,6 +3,7 @@ layout: post
 title: zookeeper
 category: 中间件
 tags: zookeeper
+description: zookeeper搭建及配置
 keywords: zookeeper
 ---
 ## zookeeper

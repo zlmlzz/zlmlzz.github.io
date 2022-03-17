@@ -3,6 +3,7 @@ layout: post
 title: keepalived
 category: 中间件
 tags: keepalived
+description: keepalived安装及常见配置
 keywords: keepalived
 ---
 ## keepalived

@@ -3,6 +3,7 @@ layout: post
 title: spring mvc
 category: java
 tags: spring
+description: spring mvc静态资源映射,会话拦截
 keywords: java,spring mvc
 ---    
 ## spring mvc 静态资源映射

@@ -3,6 +3,7 @@ layout: post
 title: spring schedule
 category: java
 tags: spring
+description: spring schedule介绍与使用
 keywords: java,spring schedule
 ---    
 <style>
