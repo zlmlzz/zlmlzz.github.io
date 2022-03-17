@@ -42,6 +42,7 @@ keywords: skywalking,监测工具
     * 找到skywalking包中的agent目录
     * 将agent目录拷贝到任意位置
     * 配置config/agent.config
+
 ```
 1.将agent.service_name修改为服务名称
 2.如果skywalking和服务部署在不同服务器,
