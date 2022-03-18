@@ -342,6 +342,10 @@ $(function() {
     if (contains(url, "zlmlzz")) {
       $('.footer').hide();
     }
+    if (contains(url, "/interview.html")) {
+      $('#post-toc-menu').trigger('click');
+      $('#menu').trigger('click');
+    }
     if (contains(url, "about-me") || contains(url, "index.html") || contains(url, "about-site")) {
       $('#commentModule').hide();
     }
