@@ -346,7 +346,8 @@ $(function() {
       $('#post-toc-menu').trigger('click');
       $('#menu').trigger('click');
     }
-    if (contains(url, "about-me") || contains(url, "index.html") || contains(url, "about-site")) {
+    if (contains(url, "about-me") || contains(url, "index.html")
+        || contains(url, "about-site") || contains(url, "/interview.html")) {
       $('#commentModule').hide();
     }
     if (contains(url, "about-me") || contains(url, "suggestions")) {
