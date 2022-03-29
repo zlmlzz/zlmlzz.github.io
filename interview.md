@@ -8,6 +8,7 @@ layout: post
 * Email:lizhuangzhuang@fancyei.com
 * 教育背景:2014-2018,徐州医科大学物联网工程
 * [博客](https://www.fancyei.com):https://www.fancyei.com
+* [简历下载](https://www.fancyei.com/李壮壮-简历.pdf)
 
 ## 专业技能
 * 基础:熟悉Java,JVM,并发和集合等,无障碍阅读英文技术文档
